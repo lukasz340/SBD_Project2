@@ -2,13 +2,11 @@
 #include <random>
 #include <fstream> 
 #include <string>
-
 #include <time.h>
 
 #define ALPHA 0.75
 #define MAX_OVERFLOW 0.25
 #define PAGE_SIZE 8
-
 #define MAX_ELEMENT 10000
 
 using namespace std;
@@ -130,7 +128,6 @@ void wczytajArea(string sciezka) {
 	ofstream file;
 	file.open(sciezka, ios::out | ios::binary);
 	file.close();
-
 }
 
 void wczytajOverflow(string sciezka) {
@@ -151,7 +148,6 @@ void wczytajOverflow(string sciezka) {
 	ofstream file;
 	file.open(sciezka, ios::out | ios::binary);
 	file.close();
-
 }
 
 void wczytajZPlikuIndex(string sciezka) {
@@ -168,11 +164,8 @@ void wczytajZPlikuIndex(string sciezka) {
 			indexTable[licznik].key = liczba;
 			numberOfKeysIndex++;
 			licznik++;
-
 		}
-
 		keyIndexTest = indexTable[1].key;
-
 		plik.close();
 	}
 }
@@ -182,7 +175,6 @@ void wczytajZPlikuArea(string sciezka) {
 	int klucz;
 	char wartosc[7];
 	int wskaznikOverflow;
-
 	int licznik = 0;
 
 	ifstream plik(sciezka);
@@ -205,12 +197,12 @@ void wczytajZPlikuArea(string sciezka) {
 		plik.close();
 	}
 }
+
 void wczytajZPlikuOverflow(string sciezka) {
 
 	int klucz;
 	char wartosc[7];
 	int wskaznikOverflow;
-
 	int licznik = 0;
 
 	ifstream plik(sciezka);
@@ -247,7 +239,6 @@ void zapiszDoPlikuIndex(string sciezka)
 
 	numberOfKeysIndex = 0;
 	write_file.close();
-
 }
 
 void zapiszDoPlikuArea(string sciezka) {
@@ -331,7 +322,6 @@ void wyswietl() {
 			cout << '\n';
 	}
 	liczbaOperacjiDyskowych += 3;
-
 }
 
 void reorganizacja() {
@@ -415,6 +405,7 @@ void reorganizacja() {
 	zapiszDoplikow();
 	liczbaOperacjiDyskowych += 3;
 }
+
 int wyznaczStrone(int indeks) {
 	int numerStrony;
 	for (int i = 0; i < numberOfKeysIndex; i++) {
@@ -433,6 +424,7 @@ int wyznaczStrone(int indeks) {
 	}
 	return numerStrony;
 }
+
 void rownyIndeks(int ktoryElement, char*wartosc, area* table) {
 	if (table[ktoryElement].czyUsuniety == true) {
 		table[ktoryElement].czyUsuniety = false;
@@ -478,11 +470,11 @@ int wyznaczElement(int ktoryElement, int indeks) {
 		{
 			if (areaTable[ktoryElement].key != indeks)
 				ktoryElement--;
-
 		}
 	}
 	return ktoryElement;
 }
+
 void dodajDoPustego(int ktoraStrona, int indeks, char*wartosc, int ktoryElement) {
 	if (areaTable[(ktoraStrona)*PAGE_SIZE].key == indeks) {
 		if (areaTable[(ktoraStrona)*PAGE_SIZE].czyUsuniety == true) {
@@ -511,7 +503,6 @@ void dodajDoPustego(int ktoraStrona, int indeks, char*wartosc, int ktoryElement)
 		areaTable[(ktoraStrona - 1) * PAGE_SIZE + poz].data[i] = wartosc[i];
 	puste--;
 	numberOfKeysArea++;
-
 	wyswietl();
 	zapiszDoplikow();
 }
@@ -544,6 +535,7 @@ void dodajDoOverflow(int ktoryElement, char*wartosc, int indeks) {
 		deleted--;
 	}
 }
+
 void zerujPointery() {
 	for (int i = 0; i < numberOfKeysArea + puste; i++)
 		areaTable[i].overflowPointer = NULL;
@@ -575,6 +567,7 @@ void dodajDoOverflowBezWskaznika(int indeks, char*wartosc, int ktoryElement) {
 		overflowTable[pozycja].data[i] = wartosc[i];
 	areaTable[ktoryElement - 1].overflowPointer = pozycja + 1;
 }
+
 void ustawPointery() {
 	for (int i = 0; i < numberOfKeysOverflow; i++) {
 		int max = 0;
@@ -609,8 +602,6 @@ void ustawPointery() {
 			}
 
 		}
-
-
 		if (overflow == true)
 			overflowTable[i - 1].overflowPointer = i + 1;
 		else {
@@ -627,11 +618,9 @@ void dodajElement(int indeks, char* wartosc) {
 	int najblizszyindex = 0;
 	int ktoryElement = -1;
 	bool wskaznikNaOverflow = false;
-
 	int ktoraStrona = wyznaczStrone(indeks);
 	ktoraStrona++;
 	ktoryElement = (ktoraStrona - 1) * PAGE_SIZE;
-
 	bool czyPuste = false;
 	ktoryElement = wyznaczElement(ktoryElement, indeks);
 
@@ -696,10 +685,8 @@ void doDodania() {
 void doDodaniaAktualizacja(char* data) {
 	if (data != NULL) {
 		int indeks;
-
 		cout << "Podaj indeks:";
 		cin >> indeks;
-
 		dodajElement(indeks, data);
 	}
 	else {
@@ -707,9 +694,7 @@ void doDodaniaAktualizacja(char* data) {
 	}
 }
 
-
 void odczytRekordu() {
-
 	wczytajZPlikow();
 	liczbaOperacjiDyskowych += 2;
 	cout << "Podaj wartosc indeksu" << endl;
@@ -724,7 +709,6 @@ void odczytRekordu() {
 			cout << "Wyszukano element o indeksie " << indeks << ": " << areaTable[element + i].data << endl;
 			zapiszDoplikow();
 			liczbaOperacjiDyskowych += 2;
-
 			return;
 		}
 		if (areaTable[element + i].key > indeks) {
@@ -756,14 +740,12 @@ char* usuniecieRekordu(int indeks) {
 		{
 			areaTable[element + i].czyUsuniety = true;
 			deleted++;
-
 			wyswietl();
 			zapiszDoplikow();
 			liczbaOperacjiDyskowych += 2;
 			return areaTable[element + i].data;
 		}
 		liczbaOperacjiDyskowych++;
-
 		if (overflowTable[areaTable[element + i].overflowPointer - 1].key == indeks) {
 			element = areaTable[element + i].overflowPointer;
 			if (overflowTable[element - 1].key == indeks) {
@@ -791,14 +773,13 @@ char* usuniecieRekordu(int indeks) {
 			}
 		}
 	}
-
 	cout << "nie znaleziono elementu" << endl;
 	wyswietl();
 	zapiszDoplikow();
 	liczbaOperacjiDyskowych += 3;
 	return NULL;
-
 }
+
 char* doUsuniecia() {
 	cout << "Podaj indeks do usuniecia" << endl;
 	int indeks;
@@ -814,7 +795,7 @@ void aktualizacja() {
 
 void menu() {
 	char wybor;
-	cout << "\nWybierz Operacje:\nW - Wstaw element\nR - Reorganizacja\nO - Odczyt\nU - Usuñ rekord\nA - Aktualizacja" << endl;
+	cout << "\nWybierz Operacje:\nW - Wstaw element\nR - Reorganizacja\nO - Odczyt\nU - UsuÅ„ rekord\nA - Aktualizacja" << endl;
 	cin >> wybor;
 	switch (wybor) {
 	case 'W':
